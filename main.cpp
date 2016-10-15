@@ -45,9 +45,9 @@ int main(int argc, char *argv[])
         }), fname.end());
         std::cout << "Request to open '" << fname << "'" << std::endl;
 
-        QProcess builder{};
-        builder.start(QString::fromStdString(VSCODE_BIN), QStringList() << QString::fromStdString(fname));
-        builder.waitForStarted() && builder.waitForFinished();
+        auto builder = new QProcess();
+        builder->start(QString::fromStdString(VSCODE_BIN), QStringList() << QString::fromStdString(fname));
+        QObject::connect(builder, SIGNAL(finished(int)), builder, SLOT(deleteLater()));
 
         clientConnection->disconnectFromHost();
     });
